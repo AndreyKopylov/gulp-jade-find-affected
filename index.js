@@ -31,10 +31,15 @@ function findAffectedRecurse(filePath, filesBase, cb) {
       var patterns = [];
 
       patterns.push(new RegExp('include (?:\.\.\/)?('+testfile+')'));
+      patterns.push(new RegExp('include (?:\.\.\/\.\.\/)?('+testfile+')'));
       patterns.push(new RegExp('extends (?:\.\.\/)?('+testfile+')'));
-
-
-      var res = patterns[0].test(jadeFile) || patterns[1].test(jadeFile);
+      patterns.push(new RegExp('extends (?:\.\.\/\.\.\/)?('+testfile+')'));
+​
+      var res =
+                patterns[0].test(jadeFile) ||
+                patterns[1].test(jadeFile) ||
+                patterns[2].test(jadeFile) ||
+                patterns[3].test(jadeFile);
 
       // let's map out the paths we've found in where the changed file will affect changes
       var foundPaths = _.map(foundFiles, 'path');
@@ -62,7 +67,7 @@ module.exports = function(){
 
   function FindAffected(file, enc, cb){
     foundFiles = [];
-    
+
     var base = path.resolve(file.cwd, file.base);
     var that = this;
 
